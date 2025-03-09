@@ -379,6 +379,11 @@ input.editable:focus {
             <div id="fundingContent"></div>
         </div>
         
+        <div class="status-container">
+            <h2 class="status-title">Rincian Penggunaan Dana Donasi</h2>
+            <div id="donationDetailContent"></div>
+        </div>
+        
         <div id="budgetContent"></div>
         
         <div class="status-container">
@@ -395,13 +400,25 @@ input.editable:focus {
             ]
         };
         
+        const donationDetailData = {
+            name: "Rincian Penggunaan Dana Donasi",
+            items: [
+                { name: "Santunan Anak Yatim", description: "Santunan tunai 21 anak", quantity: 1, unit: "Paket", price: 2100000, total: 2100000, status: "Digunakan" },
+                { name: "Bingkisan Anak Yatim", description: "Minyak, sirup, gula, biskuit, teh", quantity: 1, unit: "Paket", price: 1575000, total: 1575000, status: "Digunakan" },
+                { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Digunakan" },
+                { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Dibeli" },
+                { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 786465, status: "Dibeli" },
+                { name: "Sisa Dana Donasi", description: "Belum dialokasikan", quantity: 1, unit: "Paket", price: 68535, total: 68535, status: "Tersisa" }
+                
+            ]
+        };
+        
         const budgetData = {
             categories: [
                 {
                     name: "Konsumsi",
                     items: [
                         { name: "Nasi kotak", description: "Ayam Kambal", quantity: 80, unit: "Pack", price: 25000, total: 2000000, status: "Dibeli" },
-                        { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Dibeli" },
                         { name: "Nasi kotak", description: "Nasi Bakar", quantity: 25, unit: "Pack", price: 15000, total: 375000, status: "Dibeli" },
                         { name: "Air mineral", description: "Cleo 330 ml", quantity: 6, unit: "Dus", price: 40000, total: 240000, status: "Dibeli" },
                         { name: "Snack box", description: "Risol Mayo,Lontong,Aqua Gelas,Kurma", quantity: 110, unit: "Pieces", price: 6000, total: 660000, status: "Dibeli" },
@@ -468,8 +485,8 @@ input.editable:focus {
                 {
                     name: "Bingkisan Orang Tua Almarhum",
                     items: [
-                        { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 35000, total: 70000, status: "Dibeli" },
-                        { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 45000, total: 90000, status: "Dibeli" }
+                        { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Dibeli" },
+                        { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Dibeli" }
                     ]
                 }
             ]
@@ -516,6 +533,54 @@ input.editable:focus {
             
             // Return untuk digunakan di status
             return totalFunding;
+        }
+        
+        function renderDonationDetail() {
+            const container = document.getElementById('donationDetailContent');
+            let html = '';
+            const totalDonation = fundingData.sources.find(s => s.name === "Donasi").amount;
+            let totalUsed = 0;
+            
+            html += `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ITEM</th>
+                                <th>KUANTITAS</th>
+                                <th>SATUAN</th>
+                                <th>JUMLAH</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${donationDetailData.items.map((item) => {
+                                if (item.status === "Digunakan") {
+                                    totalUsed += item.total;
+                                }
+                                return `
+                                    <tr>
+                                        <td>
+                                            <span class="item-name">${item.name}</span>
+                                            <span class="item-description">${item.description}</span>
+                                        </td>
+                                        <td data-label="Kuantitas">${item.quantity}</td>
+                                        <td data-label="Satuan">${item.unit}</td>
+                                        <td data-label="Total">${formatCurrency(item.total)}</td>
+                                        <td data-label="Status">${item.status}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                            <tr class="subtotal-row">
+                                <td colspan="3" style="text-align: right">Total Dana Donasi</td>
+                                <td colspan="2" data-label="Total Dana">${formatCurrency(totalDonation)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = html;
         }
 
         function renderBudget() {
@@ -612,6 +677,7 @@ input.editable:focus {
             const totalFunding = renderFunding();
             const totalExpense = renderBudget();
             renderStatus(totalFunding, totalExpense);
+            renderDonationDetail();
         });
     </script>
 </body>

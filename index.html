@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAB - Buka Puasa Bersama</title>
+    <title>Realisasi Anggaran - Buka Puasa Bersama</title>
     <style>
    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
@@ -115,6 +115,7 @@ td {
     padding: 0.75rem;
     text-align: center;
     border-radius: 0 0 8px 8px;
+    margin-bottom: 0.5rem;
 }
 
 .grand-total-title {
@@ -173,68 +174,117 @@ input.editable:focus {
     background: rgba(0, 255, 242, 0.3);
 }
 
-        @media (max-width: 375px) {
-            table {
-                display: table;
-                width: 100%;
-                table-layout: fixed;
-            }
+.status-container {
+    background: rgba(0, 255, 242, 0.1);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+}
 
-            th, td {
-                padding: 0.25rem;
-                font-size: 0.6rem;
-                white-space: normal;
-                overflow: visible;
-                text-overflow: clip;
-            }
+.status-title {
+    color: var(--primary);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
 
-            th:nth-child(1), td:nth-child(1) { width: 35%; }
-            th:nth-child(2), td:nth-child(2) { width: 12%; }
-            th:nth-child(3), td:nth-child(3) { width: 13%; }
-            th:nth-child(4), td:nth-child(4) { width: 20%; }
-            th:nth-child(5), td:nth-child(5) { width: 20%; }
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-            .item-name, .item-description {
-                font-size: 0.6rem;
-                line-height: 1.2;
-                margin: 0;
-            }
+.status-row:last-child {
+    border-bottom: none;
+}
 
-            .item-description {
-                font-size: 0.55rem;
-                opacity: 0.7;
-            }
+.status-label {
+    font-size: 0.7rem;
+}
 
-            td[data-label="Kuantitas"],
-            td[data-label="Satuan"],
-            td[data-label="Harga Satuan"],
-            td[data-label="Total"] {
-                text-align: right;
-            }
+.status-value {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--primary);
+}
 
-            .table-container {
-                margin: 0;
-                padding: 0;
-                overflow-x: visible;
-            }
+.status-progress {
+    background: rgba(0, 255, 242, 0.15);
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
 
-            .category {
-                margin-bottom: 0.25rem;
-            }
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 0.25rem;
+}
 
-            .category-title {
-                padding: 0.35rem;
-            }
+@media (max-width: 375px) {
+    table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
 
-            .table-container {
-                overflow-x: visible;
-                -webkit-overflow-scrolling: auto;
-            }
+    th, td {
+        padding: 0.25rem;
+        font-size: 0.6rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
 
-            td {
-                word-break: break-word;
-            }
-        }
+    th:nth-child(1), td:nth-child(1) { width: 35%; }
+    th:nth-child(2), td:nth-child(2) { width: 12%; }
+    th:nth-child(3), td:nth-child(3) { width: 13%; }
+    th:nth-child(4), td:nth-child(4) { width: 20%; }
+    th:nth-child(5), td:nth-child(5) { width: 20%; }
+
+    .item-name, .item-description {
+        font-size: 0.6rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .item-description {
+        font-size: 0.55rem;
+        opacity: 0.7;
+    }
+
+    td[data-label="Kuantitas"],
+    td[data-label="Satuan"],
+    td[data-label="Harga Satuan"],
+    td[data-label="Total"] {
+        text-align: right;
+    }
+
+    .table-container {
+        margin: 0;
+        padding: 0;
+        overflow-x: visible;
+    }
+
+    .category {
+        margin-bottom: 0.25rem;
+    }
+
+    .category-title {
+        padding: 0.35rem;
+    }
+
+    .table-container {
+        overflow-x: visible;
+        -webkit-overflow-scrolling: auto;
+    }
+
+    td {
+        word-break: break-word;
+    }
+}
         
 @media screen and (max-width: 320px) {
     .container {
@@ -258,33 +308,31 @@ input.editable:focus {
         padding: 0.4rem;
     }
 
-    /* Smaller fonts for table content */
     th {
-        font-size: 0.45rem; /* Reduced from 0.55rem */
+        font-size: 0.45rem;
         padding: 0.3rem 0.2rem;
     }
 
     td {
-        font-size: 0.45rem; /* Reduced from 0.52rem */
+        font-size: 0.45rem;
         padding: 0.3rem 0.2rem;
     }
 
     .item-name {
-        font-size: 0.45rem; /* Reduced from 0.52rem */
+        font-size: 0.45rem;
         display: block;
         margin-bottom: 0.1rem;
     }
 
     .item-description {
-        font-size: 0.4rem; /* Reduced from 0.48rem */
+        font-size: 0.4rem;
     }
 
-    /* Make all table data elements consistently smaller */
     td[data-label="Kuantitas"],
     td[data-label="Satuan"],
     td[data-label="Harga Satuan"],
     td[data-label="Total"] {
-        font-size: 0.45rem; /* Reduced from 0.52rem */
+        font-size: 0.45rem;
     }
 
     .total-amount {
@@ -311,6 +359,10 @@ input.editable:focus {
         -webkit-overflow-scrolling: touch;
         margin-bottom: 0.5rem;
     }
+    
+    .status-label, .status-value {
+        font-size: 0.6rem;
+    }
 }
     </style>
 </head>
@@ -318,96 +370,111 @@ input.editable:focus {
     <a href="index.html" class="back-button">Kembali</a>
     <div class="container">
         <div class="header">
-            <h1>Rincian Anggaran Biaya (RAB)</h1>
+            <h1>Realisasi Anggaran</h1>
             <p>Buka Puasa Bersama Alumni SMPN 66 Jakarta</p>
         </div>
+        
+        <div class="status-container">
+            <h2 class="status-title">Sumber Dana</h2>
+            <div id="fundingContent"></div>
+        </div>
+        
         <div id="budgetContent"></div>
+        
+        <div class="status-container">
+            <h2 class="status-title">Status Anggaran</h2>
+            <div id="statusContent"></div>
+        </div>
     </div>
 
     <script>
-           const budgetData = {
+        const fundingData = {
+            sources: [
+                { name: "Iuran Peserta", description: "Iuran @ Rp. 150.000 × 60 orang", amount: 9000000 },
+                { name: "Donasi", description: "Dari berbagai donatur", amount: 5450000 },
+            ]
+        };
+        
+        const budgetData = {
             categories: [
-                // Kategori sebelumnya tetap sama
                 {
                     name: "Konsumsi",
-                    items:  [
-                        { name: "Nasi kotak", description: "Ayam Kambal", quantity: 80, unit: "Pack", price: 25000, total: 2000000 },
-                        { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 690000 },
-                        { name: "Nasi kotak", description: "Nasi Bakar", quantity: 25, unit: "Pack", price: 15000, total: 690000 },
-                        { name: "Air mineral", description: "Cleo 330 ml", quantity: 6, unit: "Dus", price: 40000, total: 240000 },
-                        { name: "Snack box", description: "Risol Mayo,Lontong,Aqua Gelas,Kurma", quantity: 110, unit: "Pieces", price: 6000, total: 660000 },
-                        { name: "Gorengan", description: "Tempe,Risol,Bakwan", quantity: 150, unit: "Pcs", price: 1500, total: 225000 },
-                        { name: "Kue basah", description: "Kue tradisional basah aneka rasa", quantity: 100, unit: "Pcs", price: 2000, total: 312000 },
-                        { name: "Es buah", description: " ", quantity: 30, unit: "Liter", price: 290000, total: 290000 },
-                        { name: "Es teh manis", description: "", quantity: 30, unit: "Liter", price:60000, total: 60000 },
-                        { name: "Es batu", description: "kristal", quantity: 2, unit: "kg", price: 20000, total: 40000 },
-                        { name: "Jeruk", description: "Jeruk medan", quantity: 3, unit: "Kg", price: 30000, total: 90000 },
-                        { name: "Salak", description: "Salak pondoh", quantity: 3, unit: "Kg", price: 20000, total: 60000 },
-                        { name: "Cabe", description: "Rawit", quantity: 1/4, unit: "kg", price: 10000, total: 10000 }
+                    items: [
+                        { name: "Nasi kotak", description: "Ayam Kambal", quantity: 80, unit: "Pack", price: 25000, total: 2000000, status: "Dibeli" },
+                        { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Dibeli" },
+                        { name: "Nasi kotak", description: "Nasi Bakar", quantity: 25, unit: "Pack", price: 15000, total: 375000, status: "Dibeli" },
+                        { name: "Air mineral", description: "Cleo 330 ml", quantity: 6, unit: "Dus", price: 40000, total: 240000, status: "Dibeli" },
+                        { name: "Snack box", description: "Risol Mayo,Lontong,Aqua Gelas,Kurma", quantity: 110, unit: "Pieces", price: 6000, total: 660000, status: "Dibeli" },
+                        { name: "Gorengan", description: "Tempe,Risol,Bakwan", quantity: 150, unit: "Pcs", price: 1500, total: 225000, status: "Dibeli" },
+                        { name: "Kue basah", description: "Kue tradisional basah aneka rasa", quantity: 100, unit: "Pcs", price: 2000, total: 200000, status: "Dibeli" },
+                        { name: "Es buah", description: " ", quantity: 30, unit: "Liter", price: 9000, total: 270000, status: "Dibeli" },
+                        { name: "Es teh manis", description: "", quantity: 30, unit: "Liter", price: 2000, total: 60000, status: "Dibeli" },
+                        { name: "Es batu", description: "kristal", quantity: 2, unit: "kg", price: 20000, total: 40000, status: "Dibeli" },
+                        { name: "Jeruk", description: "Jeruk medan", quantity: 3, unit: "Kg", price: 30000, total: 90000, status: "Dibeli" },
+                        { name: "Salak", description: "Salak pondoh", quantity: 3, unit: "Kg", price: 20000, total: 60000, status: "Dibeli" },
+                        { name: "Cabe", description: "Rawit", quantity: 0.25, unit: "kg", price: 10000, total: 2500, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Perlengkapan",
                     items: [
-                        { name: "Gelas paper 260ml", description: "50pcs", quantity: 3, unit: "Pack", price: 14500, total: 43500 },
-                        { name: "Paper try", description: "90pcs/pack", quantity: 2, unit: "Pack", price: 31000, total: 34300 },
-                        { name: "Sendok Plastik", description: "25/pack", quantity: 6, unit: "Pack", price: 1500, total: 13400 },
-                        { name: "Trash Bag", description: "90x120cm", quantity: 5, unit: "Pcs", price: 5700, total: 7650 },
-                        { name: "Banner", description: "5,5x2,5 meter", quantity: 1, unit: "Pcs", price: 20000, total: 316000 },
-                        { name: "Goodie Bag", description: "Tas souvenir", quantity: 21, unit: "Pcs", price: 2000, total: 42000 },
-                        { name: "Tenda ", description: "15X7 meter", quantity: 1, unit: "Set", price: 25000, total: 2625000}
+                        { name: "Gelas paper 260ml", description: "50pcs", quantity: 3, unit: "Pack", price: 14500, total: 43500, status: "Dibeli" },
+                        { name: "Paper try", description: "90pcs/pack", quantity: 2, unit: "Pack", price: 15650, total: 31300, status: "Dibeli" },
+                        { name: "Sendok Plastik", description: "25/pack", quantity: 6, unit: "Pack", price: 1500, total: 9000, status: "Dibeli" },
+                        { name: "Trash Bag", description: "90x120cm", quantity: 5, unit: "Pcs", price: 1530, total: 7650, status: "Dibeli" },
+                        { name: "Banner", description: "5,5x2,5 meter", quantity: 1, unit: "Pcs", price: 316000, total: 316000, status: "Dibeli" },
+                        { name: "Goodie Bag", description: "Tas souvenir", quantity: 21, unit: "Pcs", price: 2000, total: 42000, status: "Dibeli" },
+                        { name: "Tenda ", description: "15X7 meter", quantity: 1, unit: "Set", price: 2500000, total: 2500000, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Santunan Anak Yatim",
                     items: [
-                        { name: "Santunan", description: "Santunan tunai untuk anak yatim", quantity: 21, unit: "Orang", price: 100000, total: 2100000 }
+                        { name: "Santunan", description: "Santunan tunai untuk anak yatim", quantity: 21, unit: "Orang", price: 100000, total: 2100000, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Bingkisan Guru & Orang Tua Almarhum",
                     items: [
-                        { name: "Hampers Mangkok", description: "Hampers guru", quantity: 35, unit: "Mangkok", price: 22000, total:750000 },
+                        { name: "Hampers Mangkok", description: "Hampers guru", quantity: 35, unit: "Mangkok", price: 19700, total: 689500, status: "Dibeli" }
                     ]
                 },
-                // Tambahan kategori baru
                 {
                     name: "Bingkisan Anak Yatim",
-                    items:  [
-                        { name: "Minyak", description: "Minyak goreng 1 liter", quantity: 21, unit: "Botol", price: 19500, total: 409000 },
-                        { name: "Sirup", description: "marjan 650ml", quantity: 21, unit: "Kaleng", price: 12000, total: 252000 },
-                        { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 21, unit: "Pack", price: 18500, total: 388500 },
-                        { name: "Biskuit", description: "Biskuit kaleng", quantity: 21, unit: "Kaleng", price: 15000, total: 315000 },
-                        { name: "Teh", description: "", quantity: 21, unit: "Pack", price: 10000, total: 210000 }
+                    items: [
+                        { name: "Minyak", description: "Minyak goreng 1 liter", quantity: 21, unit: "Botol", price: 19500, total: 409500, status: "Dibeli" },
+                        { name: "Sirup", description: "marjan 650ml", quantity: 21, unit: "Kaleng", price: 12000, total: 252000, status: "Dibeli" },
+                        { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 21, unit: "Pack", price: 18500, total: 388500, status: "Dibeli" },
+                        { name: "Biskuit", description: "Biskuit kaleng", quantity: 21, unit: "Kaleng", price: 15000, total: 315000, status: "Dibeli" },
+                        { name: "Teh", description: "", quantity: 21, unit: "Pack", price: 10000, total: 210000, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Bingkisan untuk peserta",
-                    items:  [
-                        { name: "tasbih+peci", description: "Minyak goreng 1 liter", quantity: 35, unit: "Botol", price: 4396, total: 13681 },
-                        { name: "Tasbih digital", description: "marjan 650ml", quantity: 35, unit: "Kaleng", price: 2654, total: 86892 },
-                        { name: "Sajadah", description: "", quantity: 35, unit: "Pack", price: 13999, total: 433069 },
+                    items: [
+                        { name: "Tasbih+peci", description: "", quantity: 35, unit: "Set", price: 4400, total: 154000, status: "Dibeli" },
+                        { name: "Tasbih digital", description: "", quantity: 35, unit: "Pcs", price: 2650, total: 92750, status: "Dibeli" },
+                        { name: "Sajadah", description: "", quantity: 35, unit: "Pcs", price: 14000, total: 490000, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Jasa",
                     items: [
-                        { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000 },
-                        { name: "Keamanan", description: "Parkiran Motor/Mobil", quantity: 2, unit: "Orang", price: 50000, total: 100000 },
-                        { name: "Kebersihan", description: "", quantity: 1, unit: "orang", price: 50000, total: 50000 }
+                        { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Dibeli" },
+                        { name: "Keamanan", description: "Parkiran Motor/Mobil", quantity: 2, unit: "Orang", price: 50000, total: 100000, status: "Dibeli" },
+                        { name: "Kebersihan", description: "", quantity: 1, unit: "orang", price: 50000, total: 50000, status: "Dibeli" }
                     ]
                 },
                 {
                     name: "Bingkisan Orang Tua Almarhum",
                     items: [
-                        { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0 },
-                        { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0 },
+                        { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 35000, total: 70000, status: "Dibeli" },
+                        { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 45000, total: 90000, status: "Dibeli" }
                     ]
                 }
             ]
         };
 
-        // Fungsi-fungsi JavaScript tetap sama seperti sebelumnya
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', {
                 style: 'currency',
@@ -419,24 +486,36 @@ input.editable:focus {
         function calculateTotal(items) {
             return items.reduce((sum, item) => sum + item.total, 0);
         }
-
-        // Fungsi untuk memperbarui total saat input berubah
-        function updateTotal(categoryIndex, itemIndex, field, value) {
-            // Mengambil item yang akan diperbarui
-            const item = budgetData.categories[categoryIndex].items[itemIndex];
+        
+        function renderFunding() {
+            const container = document.getElementById('fundingContent');
+            let html = '';
+            let totalFunding = 0;
             
-            // Memperbarui nilai
-            if (field === 'quantity') {
-                item.quantity = parseFloat(value) || 0;
-            } else if (field === 'price') {
-                item.price = parseFloat(value) || 0;
-            }
+            fundingData.sources.forEach(source => {
+                totalFunding += source.amount;
+                html += `
+                    <div class="status-row">
+                        <div>
+                            <span class="status-label">${source.name}</span>
+                            <span class="item-description">${source.description}</span>
+                        </div>
+                        <span class="status-value">${formatCurrency(source.amount)}</span>
+                    </div>
+                `;
+            });
             
-            // Menghitung total baru
-            item.total = item.quantity * item.price;
+            html += `
+                <div class="status-row" style="margin-top: 0.5rem; border-top: 1px solid rgba(0, 255, 242, 0.3); padding-top: 0.5rem;">
+                    <span class="status-label" style="font-weight: 600;">Total Dana</span>
+                    <span class="status-value" style="font-size: 0.8rem;">${formatCurrency(totalFunding)}</span>
+                </div>
+            `;
             
-            // Render ulang seluruh anggaran untuk memperbarui tampilan
-            renderBudget();
+            container.innerHTML = html;
+            
+            // Return untuk digunakan di status
+            return totalFunding;
         }
 
         function renderBudget() {
@@ -469,17 +548,9 @@ input.editable:focus {
                                                 <span class="item-name">${item.name}</span>
                                                 <span class="item-description">${item.description}</span>
                                             </td>
-                                            <td data-label="Kuantitas">
-                                                <input type="number" class="editable" value="${item.quantity}" 
-                                                    onchange="updateTotal(${categoryIndex}, ${itemIndex}, 'quantity', this.value)" 
-                                                    min="0" step="any">
-                                            </td>
+                                            <td data-label="Kuantitas">${item.quantity}</td>
                                             <td data-label="Satuan">${item.unit}</td>
-                                            <td data-label="Harga Satuan">
-                                                <input type="number" class="editable" value="${item.price}" 
-                                                    onchange="updateTotal(${categoryIndex}, ${itemIndex}, 'price', this.value)" 
-                                                    min="0">
-                                            </td>
+                                            <td data-label="Harga Satuan">${formatCurrency(item.price)}</td>
                                             <td data-label="Total">${formatCurrency(item.total)}</td>
                                         </tr>
                                     `).join('')}
@@ -496,16 +567,52 @@ input.editable:focus {
 
             html += `
                 <div class="grand-total">
-                    <div class="grand-total-title">Total Keseluruhan</div>
+                    <div class="grand-total-title">Total Pengeluaran</div>
                     <div class="total-amount">${formatCurrency(grandTotal)}</div>
                     <p class="terbilang">Terbilang: ${grandTotal.toLocaleString('id-ID')} Rupiah</p>
                 </div>
             `;
 
             container.innerHTML = html;
+            
+            // Return untuk digunakan di status
+            return grandTotal;
+        }
+        
+        function renderStatus(totalFunding, totalExpense) {
+            const container = document.getElementById('statusContent');
+            const remaining = totalFunding - totalExpense;
+            const percentUsed = (totalExpense / totalFunding) * 100;
+            
+            let html = `
+                <div class="status-row">
+                    <span class="status-label">Total Dana</span>
+                    <span class="status-value">${formatCurrency(totalFunding)}</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Total Pengeluaran</span>
+                    <span class="status-value">${formatCurrency(totalExpense)}</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Sisa Dana</span>
+                    <span class="status-value" style="color: ${remaining >= 0 ? '#00FF00' : '#FF5555'}">${formatCurrency(remaining)}</span>
+                </div>
+                <div class="status-progress">
+                    <div class="progress-bar" style="width: ${percentUsed > 100 ? 100 : percentUsed}%;"></div>
+                </div>
+                <div class="status-row" style="justify-content: center; margin-top: 0.25rem;">
+                    <span class="status-label" style="font-size: 0.6rem;">${percentUsed.toFixed(1)}% dari anggaran telah terpakai</span>
+                </div>
+            `;
+            
+            container.innerHTML = html;
         }
 
-        document.addEventListener('DOMContentLoaded', renderBudget);
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalFunding = renderFunding();
+            const totalExpense = renderBudget();
+            renderStatus(totalFunding, totalExpense);
+        });
     </script>
 </body>
 </html>

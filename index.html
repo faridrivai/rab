@@ -20,6 +20,10 @@
     --background: #000000;
     --card-bg: rgba(255, 255, 255, 0.05);
     --text: #ffffff;
+    --status-purchased: #1aff66;
+    --status-used: #00c853;
+    --status-remaining: #ffea00;
+    --status-todo: rgba(255, 255, 255, 0.7);
 }
 
 body {
@@ -223,6 +227,77 @@ input.editable:focus {
     border-radius: 0.25rem;
 }
 
+.expenditure-detail {
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(0, 255, 242, 0.3);
+    padding-top: 0.5rem;
+}
+
+.status-purchased {
+    color: var(--status-purchased) !important;
+}
+
+.status-used {
+    color: var(--status-used) !important;
+}
+
+.status-remaining {
+    color: var(--status-remaining) !important;
+}
+
+.status-todo {
+    color: var(--status-todo) !important;
+}
+
+.status-pills {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.status-pill {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.status-pill:before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.25rem;
+}
+
+.pill-purchased:before {
+    background-color: var(--status-purchased);
+}
+
+.pill-used:before {
+    background-color: var(--status-used);
+}
+
+.pill-remaining:before {
+    background-color: var(--status-remaining);
+}
+
+.pill-todo:before {
+    background-color: var(--status-todo);
+}
+
+.row-purchased {
+    background-color: rgba(26, 255, 102, 0.15);
+}
+
+.row-used {
+    background-color: rgba(0, 200, 83, 0.15);
+}
+
 @media (max-width: 375px) {
     table {
         display: table;
@@ -283,6 +358,11 @@ input.editable:focus {
 
     td {
         word-break: break-word;
+    }
+
+    .status-pills {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
         
@@ -389,6 +469,7 @@ input.editable:focus {
         <div class="status-container">
             <h2 class="status-title">Status Anggaran</h2>
             <div id="statusContent"></div>
+            <div id="detailedExpenditure"></div>
         </div>
     </div>
 
@@ -396,7 +477,7 @@ input.editable:focus {
        const fundingData = {
     sources: [
         { name: "Iuran Peserta", description: "Iuran @ Rp. 150.000 × 54 orang", amount: 8100000 },
-        { name: "Donasi", description: "Dari berbagai donatur", amount: 5450000 },
+        { name: "Donasi", description: "Dari berbagai donatur", amount: 6050000 },
     ]
 };
 
@@ -406,8 +487,8 @@ const donationDetailData = {
         { name: "Santunan Anak Yatim", description: "Santunan tunai 21 anak", quantity: 1, unit: "Paket", price: 2100000, total: 2100000, status: "Digunakan" },
         { name: "Bingkisan Anak Yatim", description: "Minyak, sirup, gula, biskuit, teh", quantity: 1, unit: "Paket", price: 1575000, total: 1575000, status: "Digunakan" },
         { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Digunakan" },
-        { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Dibeli" },
-        { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Dibeli" },
+        { name: "Nasi kotak", description: "Dbesto + Teh Pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Digunakan" },
+        { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Digunakan" },
         { name: "Sisa Dana Donasi", description: "Belum dialokasikan", quantity: 1, unit: "Paket", price: 68535, total: 68535, status: "Tersisa" }
     ]
 };
@@ -421,8 +502,8 @@ const budgetData = {
                 { name: "Nasi kotak", description: "Nasi Bakar", quantity: 25, unit: "Pack", price: 15000, total: 375000, status: "Belum di beli" },
                 { name: "Air mineral", description: "Cleo 330 ml", quantity: 6, unit: "Dus", price: 40000, total: 240000, status: "Belum di beli" },
                 { name: "Snack box", description: "Risol Mayo,Lontong,Aqua Gelas,Kurma", quantity: 110, unit: "Pieces", price: 6000, total: 660000, status: "Belum di beli" },
-                { name: "Gorengan", description: "Tempe,Risol,Bakwan", quantity: 150, unit: "Pcs", price: 1500, total: 225000, status: "Dibeli" },
-                { name: "Kue basah", description: "Kue tradisional basah aneka rasa", quantity: 100, unit: "Pcs", price: 2000, total: 200000, status: "Dibeli" },
+                { name: "Gorengan", description: "Tempe,Risol,Bakwan", quantity: 150, unit: "Pcs", price: 1500, total: 225000, status: "Digunakan" },
+                { name: "Kue basah", description: "Kue tradisional basah aneka rasa", quantity: 100, unit: "Pcs", price: 2000, total: 200000, status: "Digunakan" },
                 { name: "Es buah", description: " ", quantity: 30, unit: "Liter", price: 9000, total: 270000, status: "Belum di beli" },
                 { name: "Es teh manis", description: "", quantity: 30, unit: "Liter", price: 2000, total: 60000, status: "Belum di beli" },
                 { name: "Es batu", description: "kristal", quantity: 2, unit: "kg", price: 20000, total: 40000, status: "Belum di beli" },
@@ -434,12 +515,15 @@ const budgetData = {
         {
             name: "Perlengkapan",
             items: [
-                { name: "Gelas paper 260ml", description: "50pcs", quantity: 3, unit: "Pack", price: 14500, total: 43500, status: "Dibeli" },
-                { name: "Paper try", description: "90pcs/pack", quantity: 2, unit: "Pack", price: 15650, total: 31300, status: "Dibeli" },
-                { name: "Sendok Plastik", description: "25/pack", quantity: 6, unit: "Pack", price: 1500, total: 9000, status: "Dibeli" },
-                { name: "Trash Bag", description: "90x120cm", quantity: 5, unit: "Pcs", price: 1530, total: 7650, status: "Dibeli" },
-                { name: "Banner", description: "5,5x2,5 meter", quantity: 1, unit: "Pcs", price: 250000, total: 25000, status: "Dibeli" },
-                { name: "Tenda ", description: "15X7 meter", quantity: 1, unit: "Set", price: 2500000, total: 2500000, status: "Belum digunakan" }
+                { name: "Gelas paper 260ml", description: "50pcs", quantity: 3, unit: "Pack", price: 14500, total: 43500, status: "Digunakan" },
+                { name: "Paper try", description: "90pcs/pack", quantity: 2, unit: "Pack", price: 15650, total: 31300, status: "Digunakan" },
+                { name: "Sendok Plastik", description: "25/pack", quantity: 6, unit: "Pack", price: 1500, total: 9000, status: "Digunakan" },
+                { name: "Trash Bag", description: "90x120cm", quantity: 5, unit: "Pcs", price: 1530, total: 7650, status: "Digunakan" },
+                { name: "Banner", description: "5,5x2,5 meter", quantity: 1, unit: "Pcs", price: 250000, total: 25000, status: "Digunakan" },
+                { name: "Parsel", description: "", quantity: 2, unit: "Pcs", price: 50000, total: 50000, status: "Digunakan" },
+                { name: "Tampah", description: "", quantity: 2, unit: "Pcs", price: 40000, total: 40000, status: "Digunakan" },
+                { name: "Tisu", description: "3", quantity: 1, unit: "Pack", price: 23000, total: 23000, status: "Digunakan" },
+                { name: "Tenda + jasa angkut ", description: "15X7 meter", quantity: 1, unit: "Set", price: 2500000, total: 3125000, status: "Belum digunakan" }
             ]
         },
         {
@@ -451,25 +535,35 @@ const budgetData = {
         {
             name: "Bingkisan Guru & Orang Tua Almarhum",
             items: [
-                { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Dibeli" }
+                { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Digunakan" }
             ]
         },
         {
-            name: "Bingkisan Anak Yatim",
+            name: "Bingkisan Anak Yatim grosir",
             items: [
-                { name: "Minyak", description: "Minyak goreng 1 liter", quantity: 21, unit: "Botol", price: 19500, total: 409500, status: "Dibeli" },
-                { name: "Sirup", description: "marjan 650ml", quantity: 21, unit: "Kaleng", price: 12000, total: 252000, status: "Dibeli" },
-                { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 21, unit: "Pack", price: 18500, total: 388500, status: "Dibeli" },
-                { name: "Biskuit", description: "Biskuit kaleng", quantity: 21, unit: "Kaleng", price: 15000, total: 315000, status: "Dibeli" },
-                { name: "Teh", description: "", quantity: 21, unit: "Pack", price: 10000, total: 210000, status: "Dibeli" }
+                { name: "Minyak", description: "Minyak goreng 1 liter", quantity: 12, unit: "Botol", price: 17000, total: 205000, status: "Digunakan" },
+                { name: "Sirup", description: "marjan 450ml", quantity: 10, unit: "Kaleng", price: 11400, total: 128000, status: "Digunakan" },
+                { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 20, unit: "Pack", price: 17700, total: 354000, status: "Digunakan" },
+                { name: "Biskuit", description: "Biskuit wafer stick", quantity: 12, unit: "Kaleng", price: 15000, total: 180000, status: "Digunakan" }
             ]
         },
+        {
+            name: "Bingkisan Anak Yatim eceran",
+            items: [
+            { name: "Minyak", description: "Minyak goreng 1 liter (termasuk diskon Rp 25.000)", quantity: 12, unit: "Botol", price: 17000, total: 155000, status: "Digunakan" },
+                { name: "Sirup", description: "marjan 450ml", quantity: 10, unit: "Kaleng", price: 11400, total: 114000, status: "Digunakan" },
+                { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 2, unit: "Pack", price: 17700, total: 35400, status: "Digunakan" },
+                { name: "Teh celup", description: "Gula pasir kemasan 1kg", quantity: 16, unit: "Pack", price: 6000, total: 96000, status: "Digunakan" },
+                { name: "Biskuit", description: "Biskuit wafer stick", quantity: 10, unit: "Kaleng", price: 16500, total: 165000, status: "Digunakan" }
+            ]
+        },
+        
         {
             name: "Bingkisan untuk peserta",
             items: [
-                { name: "Tasbih+peci", description: "", quantity: 35, unit: "Set", price: 4400, total: 154000, status: "Dibeli" },
-                { name: "Tasbih digital", description: "", quantity: 35, unit: "Pcs", price: 2650, total: 92750, status: "Dibeli" },
-                { name: "Sajadah", description: "", quantity: 35, unit: "Pcs", price: 14000, total: 490000, status: "Dibeli" },
+                { name: "Tasbih+peci", description: "", quantity: 35, unit: "Set", price: 4400, total: 154000, status: "Digunakan" },
+                { name: "Tasbih digital", description: "", quantity: 35, unit: "Pcs", price: 2650, total: 92750, status: "Digunakan" },
+                { name: "Sajadah", description: "", quantity: 35, unit: "Pcs", price: 14000, total: 490000, status: "Digunakan" },
                 { name: "Goodie Bag", description: "Tas souvenir", quantity: 56, unit: "Pcs", price: 2000, total: 112000, status: "Belum di beli" }
             ]
         },
@@ -478,19 +572,33 @@ const budgetData = {
             items: [
                 { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Belum digunakan" },
                 { name: "Keamanan", description: "Parkiran Motor/Mobil", quantity: 2, unit: "Orang", price: 50000, total: 100000, status: "Belum digunakan" },
-                { name: "Kebersihan", description: "", quantity: 1, unit: "orang", price: 50000, total: 50000, status: "Belum digunakan" },
-                { name: "Angkut tenda", description: "", quantity: 1, unit: "orang", price: 500000, total: 500000, status: "Belum digunakan" }
+                { name: "Kebersihan", description: "", quantity: 1, unit: "orang", price: 50000, total: 50000, status: "Belum digunakan" }
             ]
         },
         {
             name: "Bingkisan Orang Tua Almarhum",
             items: [
-                { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Dibeli" },
-                { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Dibeli" }
+                { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Digunakan" },
+                { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Digunakan" }
             ]
         }
     ]
 };
+
+// Mengubah semua status "Dibeli" menjadi "Digunakan"
+donationDetailData.items.forEach(item => {
+    if (item.status === "Dibeli") {
+        item.status = "Digunakan";
+    }
+});
+
+budgetData.categories.forEach(category => {
+    category.items.forEach(item => {
+        if (item.status === "Dibeli") {
+            item.status = "Digunakan";
+        }
+    });
+});
 
 function formatCurrency(amount) {
     return new Intl.NumberFormat('id-ID', {
@@ -502,6 +610,17 @@ function formatCurrency(amount) {
 
 function calculateTotal(items) {
     return items.reduce((sum, item) => sum + item.total, 0);
+}
+
+function getStatusClass(status) {
+    if (status === "Dibeli" || status === "Digunakan") return "status-used";
+    if (status === "Tersisa") return "status-remaining";
+    return "status-todo";
+}
+
+function getRowClass(status) {
+    if (status === "Dibeli" || status === "Digunakan") return "row-used";
+    return "";
 }
 
 function renderFunding() {
@@ -559,7 +678,7 @@ function renderDonationDetail() {
                             totalUsed += item.total;
                         }
                         return `
-                            <tr>
+                            <tr class="${getRowClass(item.status)}">
                                 <td>
                                     <span class="item-name">${item.name}</span>
                                     <span class="item-description">${item.description}</span>
@@ -567,7 +686,7 @@ function renderDonationDetail() {
                                 <td data-label="Kuantitas">${item.quantity}</td>
                                 <td data-label="Satuan">${item.unit}</td>
                                 <td data-label="Total">${formatCurrency(item.total)}</td>
-                                <td data-label="Status">${item.status}</td>
+                                <td data-label="Status" class="${getStatusClass(item.status)}">${item.status}</td>
                             </tr>
                         `;
                     }).join('')}
@@ -608,7 +727,7 @@ function renderBudget() {
                         </thead>
                         <tbody>
                             ${category.items.map((item, itemIndex) => `
-                                <tr>
+                                <tr class="${getRowClass(item.status)}">
                                     <td>
                                         <span class="item-name">${item.name}</span>
                                         <span class="item-description">${item.description}</span>
@@ -616,7 +735,10 @@ function renderBudget() {
                                     <td data-label="Kuantitas">${item.quantity}</td>
                                     <td data-label="Satuan">${item.unit}</td>
                                     <td data-label="Harga Satuan">${formatCurrency(item.price)}</td>
-                                    <td data-label="Total">${formatCurrency(item.total)}</td>
+                                    <td data-label="Total">
+                                        ${formatCurrency(item.total)}
+                                        <span class="item-description ${getStatusClass(item.status)}">${item.status}</span>
+                                    </td>
                                 </tr>
                             `).join('')}
                             <tr class="subtotal-row">
@@ -632,38 +754,43 @@ function renderBudget() {
 
     html += `
         <div class="grand-total">
-            <div class="grand-total-title">Total Pengeluaran</div>
+            <h3 class="grand-total-title">Total Anggaran</h3>
             <div class="total-amount">${formatCurrency(grandTotal)}</div>
-            <p class="terbilang">Terbilang: ${grandTotal.toLocaleString('id-ID')} Rupiah</p>
         </div>
     `;
-
+    
     container.innerHTML = html;
     
-    // Return untuk digunakan di status
     return grandTotal;
 }
 
-function calculateSpentFunds(budgetData) {
-    let totalSpent = 0;
+function renderStatus() {
+    const totalFunding = renderFunding();
+    const totalBudget = renderBudget();
+    const container = document.getElementById('statusContent');
     
-    // Calculate from all budget categories
+    // Calculate used budget
+    let totalUsed = 0;
+    let totalPurchased = 0;
+    let totalRemaining = 0;
+    let totalTodo = 0;
+    
     budgetData.categories.forEach(category => {
         category.items.forEach(item => {
-            if (item.status === "Digunakan" || item.status === "Dibeli") {
-                totalSpent += item.total;
+            if (item.status === "Digunakan") {
+                totalUsed += item.total;
+            } else if (item.status === "Dibeli") {
+                totalPurchased += item.total;
+            } else if (item.status === "Tersisa") {
+                totalRemaining += item.total;
+            } else {
+                totalTodo += item.total;
             }
         });
     });
     
-    return totalSpent;
-}
-
-function renderStatus(totalFunding, totalExpense) {
-    const container = document.getElementById('statusContent');
-    const totalSpent = calculateSpentFunds(budgetData);
-    const remaining = totalFunding - totalSpent;
-    const percentSpent = (totalSpent / totalFunding) * 100;
+    const totalUsedAndPurchased = totalUsed + totalPurchased;
+    const budgetProgress = (totalUsedAndPurchased / totalBudget) * 100;
     
     let html = `
         <div class="status-row">
@@ -672,34 +799,71 @@ function renderStatus(totalFunding, totalExpense) {
         </div>
         <div class="status-row">
             <span class="status-label">Total Anggaran</span>
-            <span class="status-value">${formatCurrency(totalExpense)}</span>
+            <span class="status-value">${formatCurrency(totalBudget)}</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Selisih</span>
+            <span class="status-value ${totalFunding >= totalBudget ? "status-purchased" : "status-todo"}">${formatCurrency(totalFunding - totalBudget)}</span>
         </div>
         <div class="status-row">
             <span class="status-label">Dana Terpakai</span>
-            <span class="status-value">${formatCurrency(totalSpent)}</span>
+            <span class="status-value status-used">${formatCurrency(totalUsedAndPurchased)} (${budgetProgress.toFixed(1)}%)</span>
         </div>
         <div class="status-row">
-            <span class="status-label">Sisa Dana</span>
-            <span class="status-value">${formatCurrency(remaining)}</span>
+            <span class="status-label">Dana Belum Terpakai</span>
+            <span class="status-value status-todo">${formatCurrency(totalTodo)}</span>
         </div>
+        
         <div class="status-progress">
-            <div class="progress-bar" style="width: ${percentSpent.toFixed(1)}%"></div>
+            <div class="progress-bar" style="width: ${budgetProgress}%"></div>
         </div>
-        <div style="text-align: center; margin-top: 0.3rem; font-size: 0.6rem;">
-            ${percentSpent.toFixed(1)}% dari dana telah digunakan
+        
+        <div class="status-pills">
+            <div class="status-pill pill-used">Dana Telah Digunakan: ${formatCurrency(totalUsed)}</div>
+            <div class="status-pill pill-remaining">Dana Tersisa: ${formatCurrency(totalRemaining)}</div>
+            <div class="status-pill pill-todo">Dana Belum Digunakan: ${formatCurrency(totalTodo)}</div>
         </div>
     `;
     
     container.innerHTML = html;
+    
+    // Render detailed expenditure
+    renderDetailedExpenditure(totalUsed);
 }
 
-// Initialize the page
-window.onload = function() {
-    const totalFunding = renderFunding();
+function renderDetailedExpenditure(totalUsed) {
+    const container = document.getElementById('detailedExpenditure');
+    let html = '<div class="expenditure-detail">';
+    html += '<h3 class="status-title">Rincian Pengeluaran</h3>';
+    
+    budgetData.categories.forEach(category => {
+        let categoryUsed = 0;
+        category.items.forEach(item => {
+            if (item.status === "Digunakan") {
+                categoryUsed += item.total;
+            }
+        });
+        
+        if (categoryUsed > 0) {
+            const percentage = ((categoryUsed / totalUsed) * 100).toFixed(1);
+            html += `
+                <div class="status-row">
+                    <span class="status-label">${category.name}</span>
+                    <span class="status-value status-used">${formatCurrency(categoryUsed)} (${percentage}%)</span>
+                </div>
+            `;
+        }
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
     renderDonationDetail();
-    const totalExpense = renderBudget();
-    renderStatus(totalFunding, totalExpense);
-};
-</script>
+    renderStatus();
+});
+    </script>
 </body>
 </html>

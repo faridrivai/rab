@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realisasi Anggaran - Buka Puasa Bersama</title>
+    <style>
+   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+:root {
+    --primary: #00fff2;
+    --secondary: #0a1128;
+    --background: #000000;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --text: #ffffff;
+    --status-purchased: #1aff66;
+    --status-used: #00c853;
+    --status-remaining: #ffea00;
+    --status-todo: rgba(255, 255, 255, 0.7);
+    --glow: 0 0 10px var(--primary), 0 0 20px rgba(0, 255, 242, 0.5);
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Futuristic background effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(0, 255, 242, 0.05) 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(0, 255, 242, 0.05) 0%, transparent 30%),
+        linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.9) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Grid lines effect */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, transparent 99.5%, rgba(0, 255, 242, 0.15) 99.5%),
+        linear-gradient(180deg, transparent 99.5%, rgba(0, 255, 242, 0.15) 99.5%);
+    background-size: 40px 40px;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+    background: linear-gradient(135deg, var(--secondary), #000);
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 255, 242, 0.3);
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(0, 255, 242, 0.3); }
+    100% { box-shadow: 0 0 15px rgba(0, 255, 242, 0.7); }
+}
+
+/* Animated header line effect */
+.header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.header h1 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.7);
+}
+
+.header p {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.category {
+    background: rgba(0, 0, 0, 0.5);
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(0, 255, 242, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: slideUp 0.5s ease forwards;
+}
+
+.category:hover {
+    border-color: rgba(0, 255, 242, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.category-title {
+    color: var(--primary);
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 255, 242, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Category title hover effect */
+.category-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 242, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.category:hover .category-title::after {
+    transform: translateX(100%);
+}
+
+.table-container {
+    width: 100%;
+    background: transparent;
+    overflow-x: auto;
+    position: relative;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.65rem;
+}
+
+th {
+    background: rgba(0, 255, 242, 0.1);
+    color: var(--primary);
+    text-align: left;
+    padding: 0.35rem;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+td {
+    padding: 0.35rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s ease;
+}
+
+tr:hover td {
+    background-color: rgba(0, 255, 242, 0.05);
+}
+
+.item-name {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.65rem;
+}
+
+.item-description {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.6rem;
+    display: block;
+}
+
+.subtotal-row {
+    background: rgba(0, 255, 242, 0.1);
+    font-weight: 500;
+}
+
+.subtotal-row td {
+    color: var(--primary);
+}
+
+.grand-total {
+    background: rgba(0, 255, 242, 0.1);
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(0, 255, 242, 0.3);
+    position: relative;
+    overflow: hidden;
+    animation: pulse 3s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px rgba(0, 255, 242, 0.2); }
+    100% { box-shadow: 0 0 15px rgba(0, 255, 242, 0.5); }
+}
+
+/* Total amount highlight effect */
+.grand-total::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 242, 0.2), transparent);
+    top: 0;
+    left: -100%;
+    animation: shimmer 3s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+}
+
+.grand-total-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.total-amount {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin: 0.25rem 0;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.7);
+    animation: textPulse 2s infinite alternate;
+}
+
+@keyframes textPulse {
+    0% { text-shadow: 0 0 2px rgba(0, 255, 242, 0.5); }
+    100% { text-shadow: 0 0 8px rgba(0, 255, 242, 0.9); }
+}
+
+.terbilang {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+input.editable {
+    background: rgba(0, 255, 242, 0.05);
+    border: 1px solid rgba(0, 255, 242, 0.3);
+    color: #fff;
+    border-radius: 3px;
+    width: 100%;
+    padding: 0.25rem;
+    font-size: 0.65rem;
+    text-align: right;
+}
+
+input.editable:focus {
+    background: rgba(0, 255, 242, 0.1);
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 255, 242, 0.5);
+}
+
+.back-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 255, 242, 0.2);
+    color: var(--primary);
+    border: 1px solid rgba(0, 255, 242, 0.5);
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 0.8rem;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.back-button:hover {
+    background: rgba(0, 255, 242, 0.3);
+    box-shadow: 0 0 10px rgba(0, 255, 242, 0.7);
+    transform: translateY(-2px);
+}
+
+.status-container {
+    background: rgba(0, 255, 242, 0.1);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 255, 242, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Status containers appear one after another */
+.status-container:nth-child(2) { animation-delay: 0.2s; }
+.status-container:nth-child(3) { animation-delay: 0.4s; }
+.status-container:nth-child(4) { animation-delay: 0.6s; }
+
+/* Status container futuristic border effect */
+.status-container::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    background: linear-gradient(90deg, var(--primary), transparent, var(--primary));
+    z-index: -1;
+    opacity: 0.3;
+    animation: borderGlow 3s infinite linear;
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+.status-title {
+    color: var(--primary);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.5);
+    position: relative;
+}
+
+/* Underline effect for titles */
+.status-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Status rows appear one after another */
+.status-row:nth-child(1) { animation-delay: 0.1s; }
+.status-row:nth-child(2) { animation-delay: 0.2s; }
+.status-row:nth-child(3) { animation-delay: 0.3s; }
+.status-row:nth-child(4) { animation-delay: 0.4s; }
+.status-row:nth-child(5) { animation-delay: 0.5s; }
+
+.status-row:hover {
+    background: rgba(0, 255, 242, 0.05);
+    transform: translateX(5px);
+}
+
+.status-row:last-child {
+    border-bottom: none;
+}
+
+.status-label {
+    font-size: 0.7rem;
+}
+
+.status-value {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.status-row:hover .status-value {
+    transform: scale(1.05);
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.7);
+}
+
+.status-progress {
+    background: rgba(0, 255, 242, 0.15);
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 0.25rem;
+    position: relative;
+    transition: width 1s ease-in-out;
+    animation: progressAnimation 1.5s ease-out;
+}
+
+@keyframes progressAnimation {
+    from { width: 0%; }
+}
+
+/* Progress bar shimmer effect */
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.expenditure-detail {
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(0, 255, 242, 0.3);
+    padding-top: 0.5rem;
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.5s;
+    animation-fill-mode: both;
+}
+
+.status-purchased {
+    color: var(--status-purchased) !important;
+    text-shadow: 0 0 5px rgba(26, 255, 102, 0.5);
+}
+
+.status-used {
+    color: var(--status-used) !important;
+    text-shadow: 0 0 5px rgba(0, 200, 83, 0.5);
+}
+
+.status-remaining {
+    color: var(--status-remaining) !important;
+    text-shadow: 0 0 5px rgba(255, 234, 0, 0.5);
+}
+
+.status-todo {
+    color: var(--status-todo) !important;
+}
+
+.status-pills {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.7s;
+    animation-fill-mode: both;
+}
+
+.status-pill {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    animation: pillPulse 3s infinite alternate;
+}
+
+.status-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pillPulse {
+    0% { box-shadow: 0 0 3px rgba(0, 255, 242, 0.3); }
+    100% { box-shadow: 0 0 8px rgba(0, 255, 242, 0.6); }
+}
+
+.status-pill:before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.25rem;
+}
+
+.pill-purchased:before {
+    background-color: var(--status-purchased);
+    box-shadow: 0 0 5px var(--status-purchased);
+    animation: blink 2s infinite alternate;
+}
+
+.pill-used:before {
+    background-color: var(--status-used);
+    box-shadow: 0 0 5px var(--status-used);
+    animation: blink 2s infinite alternate;
+}
+
+.pill-remaining:before {
+    background-color: var(--status-remaining);
+    box-shadow: 0 0 5px var(--status-remaining);
+    animation: blink 2s infinite alternate;
+}
+
+.pill-todo:before {
+    background-color: var(--status-todo);
+    animation: blink 2s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.row-purchased {
+    background-color: rgba(26, 255, 102, 0.15);
+    transition: background-color 0.3s ease;
+}
+
+.row-purchased:hover {
+    background-color: rgba(26, 255, 102, 0.25);
+}
+
+.row-used {
+    background-color: rgba(0, 200, 83, 0.15);
+    transition: background-color 0.3s ease;
+}
+
+.row-used:hover {
+    background-color: rgba(0, 200, 83, 0.25);
+}
+
+/* Floating particles effect */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+/* Add subtle animation for appearing elements */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-fade {
+    animation: fadeSlideUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+/* Stagger animation delays for children */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+@media (max-width: 375px) {
+    table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    th, td {
+        padding: 0.25rem;
+        font-size: 0.6rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    th:nth-child(1), td:nth-child(1) { width: 35%; }
+    th:nth-child(2), td:nth-child(2) { width: 12%; }
+    th:nth-child(3), td:nth-child(3) { width: 13%; }
+    th:nth-child(4), td:nth-child(4) { width: 20%; }
+    th:nth-child(5), td:nth-child(5) { width: 20%; }
+
+    .item-name, .item-description {
+        font-size: 0.6rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .item-description {
+        font-size: 0.55rem;
+        opacity: 0.7;
+    }
+
+    td[data-label="Kuantitas"],
+    td[data-label="Satuan"],
+    td[data-label="Harga Satuan"],
+    td[data-label="Total"] {
+        text-align: right;
+    }
+
+    .table-container {
+        margin: 0;
+        padding: 0;
+        overflow-x: visible;
+    }
+
+    .category {
+        margin-bottom: 0.25rem;
+    }
+
+    .category-title {
+        padding: 0.35rem;
+    }
+
+    .table-container {
+        overflow-x: visible;
+        -webkit-overflow-scrolling: auto;
+    }
+
+    td {
+        word-break: break-word;
+    }
+
+    .status-pills {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+        
+@media screen and (max-width: 320px) {
+    .container {
+        padding: 0.25rem;
+    }
+
+    .header {
+        padding: 0.5rem;
+    }
+
+    .header h1 {
+        font-size: 0.9rem;
+    }
+
+    .header p {
+        font-size: 0.7rem;
+    }
+
+    .category-title {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+    }
+
+    th {
+        font-size: 0.45rem;
+        padding: 0.3rem 0.2rem;
+    }
+
+    td {
+        font-size: 0.45rem;
+        padding: 0.3rem 0.2rem;
+    }
+
+    .item-name {
+        font-size: 0.45rem;
+        display: block;
+        margin-bottom: 0.1rem;
+    }
+
+    .item-description {
+        font-size: 0.4rem;
+    }
+
+    td[data-label="Kuantitas"],
+    td[data-label="Satuan"],
+    td[data-label="Harga Satuan"],
+    td[data-label="Total"] {
+        font-size: 0.45rem;
+    }
+
+    .total-amount {
+        font-size: 1rem;
+    }
+
+    .terbilang {
+        font-size: 0.55rem;
+    }
+
+    .back-button {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+    }
+
+    th:nth-child(1), td:nth-child(1) { width: 30%; }
+    th:nth-child(2), td:nth-child(2) { width: 15%; }
+    th:nth-child(3), td:nth-child(3) { width: 15%; }
+    th:nth-child(4), td:nth-child(4) { width: 20%; }
+    th:nth-child(5), td:nth-child(5) { width: 20%; }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 0.5rem;
+    }
+    
+    .status-label, .status-value {
+        font-size: 0.6rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Kembali</a>
+    <div class="container">
+        <div class="header">
+            <h1>Realisasi Anggaran</h1>
+            <p>Buka Puasa Bersama Alumni SMPN 66 Jakarta</p>
+        </div>
+        
+        <div class="status-container">
+            <h2 class="status-title">Sumber Dana</h2>
+            <div id="fundingContent"></div>
+        </div>
+        
+        <div class="status-container">
+            <h2 class="status-title">Rincian Penggunaan Dana Donasi</h2>
+            <div id="donationDetailContent"></div>
+        </div>
+        
+        <div id="budgetContent"></div>
+        
+        <div class="status-container">
+            <h2 class="status-title">Status Anggaran</h2>
+            <div id="statusContent"></div>
+            <div id="detailedExpenditure"></div>
+        </div>
+    </div>
+
+    <script>
+       const fundingData = {
+    sources: [
+        { name: "Iuran Peserta", description: "Iuran @ Rp. 150.000 × 51 orang", amount: 7600000 },
+        { name: "Donasi", description: "Dari berbagai donatur", amount: 6050000 },
+    ]
+};
+
+const donationDetailData = {
+    name: "Rincian Penggunaan Dana Donasi",
+    items: [
+        { name: "Santunan Anak Yatim", description: "Santunan tunai 21 anak", quantity: 1, unit: "Paket", price: 2100000, total: 2100000, status: "Digunakan" },
+        { name: "Bingkisan Anak Yatim", description: "Minyak, sirup, gula, biskuit, teh", quantity: 1, unit: "Paket", price: 1575000, total: 1575000, status: "Digunakan" },
+        { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Digunakan" },
+        { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Digunakan" },
+        { name: "Sisa Dana Donasi", description: "Belum dialokasikan", quantity: 1, unit: "Paket", price: 653984, total: 653984, status: "Tersisa" }
+    ]
+};
+
+const budgetData = {
+    categories: [
+        {
+            name: "Konsumsi",
+            items: [
+                { name: "Nasi kotak", description: "Ayam Kambal", quantity: 74, unit: "Pack", price: 25000, total: 1850000, status: "Digunakan" },
+                { name: "Nasi kotak", description: "Dbesto+teh pucuk", quantity: 21, unit: "Pack", price: 20000, total: 420000, status: "Digunakan" },
+                { name: "Nasi kotak", description: "Nasi bakar", quantity: 25, unit: "Pack", price: 15000, total: 375000, status: "Digunakan" },
+                { name: "Air mineral", description: "Cleo 330 ml", quantity: 6, unit: "Dus", price: 40000, total: 240000, status: "Belum di beli" },
+                { name: "Snack box", description: "Risol Mayo,Lontong,Aqua Gelas,Kurma", quantity: 130, unit: "Pieces", price: 6000, total: 780000, status: "Belum di beli" },
+                { name: "Gorengan", description: "Tempe,Risol,Bakwan", quantity: 150, unit: "Pcs", price: 1500, total: 225000, status: "Digunakan" },
+                { name: "Kue basah", description: "Kue tradisional basah aneka rasa", quantity: 100, unit: "Pcs", price: 2000, total: 200000, status: "Digunakan" },
+                { name: "Es buah", description: " ", quantity: 30, unit: "Liter", price: 9000, total: 270000, status: "Belum di beli" },
+                { name: "Es teh manis", description: "", quantity: 30, unit: "Liter", price: 2000, total: 60000, status: "Belum di beli" },
+                { name: "Es batu", description: "kristal", quantity: 2, unit: "kg", price: 20000, total: 40000, status: "Belum di beli" },
+                { name: "Jeruk", description: "Jeruk medan", quantity: 3, unit: "Kg", price: 30000, total: 90000, status: "Belum di beli" },
+                { name: "Salak", description: "Salak pondoh", quantity: 3, unit: "Kg", price: 20000, total: 60000, status: "Belum di beli" },
+                { name: "Cabe", description: "Rawit", quantity: 0.25, unit: "kg", price: 10000, total: 2500, status: "Belum di beli" }
+            ]
+        },
+        {
+            name: "Perlengkapan",
+            items: [
+                { name: "Gelas paper 260ml", description: "50pcs", quantity: 3, unit: "Pack", price: 14500, total: 43500, status: "Digunakan" },
+                { name: "Paper try", description: "90pcs/pack", quantity: 2, unit: "Pack", price: 15650, total: 31300, status: "Digunakan" },
+                { name: "Sendok Plastik", description: "25/pack", quantity: 6, unit: "Pack", price: 1500, total: 9000, status: "Digunakan" },
+                { name: "Trash Bag", description: "90x120cm", quantity: 5, unit: "Pcs", price: 1530, total: 7650, status: "Digunakan" },
+                { name: "Banner", description: "5,5x2,5 meter", quantity: 1, unit: "Pcs", price: 250000, total: 25000, status: "Digunakan" },
+                { name: "Parsel", description: "", quantity: 2, unit: "Pcs", price: 50000, total: 50000, status: "Digunakan" },
+                { name: "Tampah", description: "", quantity: 2, unit: "Pcs", price: 40000, total: 40000, status: "Digunakan" },
+                { name: "Tisu", description: "3", quantity: 1, unit: "Pack", price: 23000, total: 23000, status: "Digunakan" },
+                { name: "Goodie Bag ", description: "1 Lusin", quantity: 5, unit: "Pcs", price: 28000, total: 140000, status: "Digunakan" },
+                 { name: "Plakat ", description: "1 ", quantity: 1, unit: "Pcs", price: 127000, total: 127000, status: "Digunakan" },
+                { name: "Tenda + jasa angkut (DP) ", description: "15X7 meter", quantity: 1, unit: "Set", price: 1562500, total: 1562500, status: "Digunakan" },
+                { name: "Tenda + jasa angkut ", description: "15X7 meter", quantity: 1, unit: "Set", price: 1562500, total: 1562500, status: "Belum digunakan" }
+            ]
+        },
+        {
+            name: "Santunan Anak Yatim",
+            items: [
+                { name: "Santunan", description: "Santunan tunai untuk anak yatim", quantity: 21, unit: "Orang", price: 100000, total: 2100000, status: "Digunakan" }
+            ]
+        },
+        {
+            name: "Bingkisan Guru & Orang Tua Almarhum",
+            items: [
+                { name: "Hampers guru", description: "Mangkok hampers", quantity: 35, unit: "Pack", price: 23000, total: 801016, status: "Digunakan" }
+            ]
+        },
+        {
+            name: "Bingkisan Anak Yatim grosir",
+            items: [
+                { name: "Minyak", description: "Minyak goreng 1 liter", quantity: 12, unit: "Botol", price: 17000, total: 205000, status: "Digunakan" },
+                { name: "Sirup", description: "marjan 450ml", quantity: 10, unit: "Kaleng", price: 11400, total: 128000, status: "Digunakan" },
+                { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 20, unit: "Pack", price: 17700, total: 354000, status: "Digunakan" },
+                { name: "Biskuit", description: "Biskuit wafer stick", quantity: 12, unit: "Kaleng", price: 15000, total: 180000, status: "Digunakan" }
+            ]
+        },
+        {
+            name: "Bingkisan Anak Yatim eceran",
+            items: [
+            { name: "Minyak", description: "Minyak goreng 1 liter (termasuk diskon Rp 25.000)", quantity: 12, unit: "Botol", price: 17000, total: 155000, status: "Digunakan" },
+                { name: "Sirup", description: "marjan 450ml", quantity: 10, unit: "Kaleng", price: 11400, total: 114000, status: "Digunakan" },
+                { name: "Gula", description: "Gula pasir kemasan 1kg", quantity: 2, unit: "Pack", price: 17700, total: 35400, status: "Digunakan" },
+                { name: "Teh celup", description: "Gula pasir kemasan 1kg", quantity: 16, unit: "Pack", price: 6000, total: 96000, status: "Digunakan" },
+                { name: "Biskuit", description: "Biskuit wafer stick", quantity: 10, unit: "Kaleng", price: 16500, total: 165000, status: "Digunakan" }
+            ]
+        },
+        
+        {
+            name: "Bingkisan untuk peserta",
+            items: [
+                { name: "Tasbih+peci", description: "", quantity: 35, unit: "Set", price: 4400, total: 154000, status: "Digunakan" },
+                { name: "Tasbih digital", description: "", quantity: 35, unit: "Pcs", price: 2650, total: 92750, status: "Digunakan" },
+                { name: "Sajadah", description: "", quantity: 35, unit: "Pcs", price: 14000, total: 490000, status: "Digunakan" }
+            ]
+        },
+        {
+            name: "Jasa",
+            items: [
+                { name: "Penceramah", description: "Ceramah Ramadan", quantity: 1, unit: "Orang", price: 500000, total: 500000, status: "Belum digunakan" },
+                { name: "Keamanan", description: "Parkiran Motor/Mobil", quantity: 2, unit: "Orang", price: 50000, total: 100000, status: "Belum digunakan" },
+                { name: "Kebersihan", description: "", quantity: 1, unit: "orang", price: 50000, total: 50000, status: "Belum digunakan" }
+            ]
+        },
+        {
+            name: "Bingkisan Orang Tua Almarhum",
+            items: [
+                { name: "Sejadah", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Digunakan" },
+                { name: "Sarung", description: "", quantity: 2, unit: "Pcs", price: 0, total: 0, status: "Digunakan" }
+            ]
+        }
+    ]
+};
+
+// Mengubah semua status "Dibeli" menjadi "Digunakan"
+donationDetailData.items.forEach(item => {
+    if (item.status === "Dibeli") {
+        item.status = "Digunakan";
+    }
+});
+
+budgetData.categories.forEach(category => {
+    category.items.forEach(item => {
+        if (item.status === "Dibeli") {
+            item.status = "Digunakan";
+        }
+    });
+});
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(amount);
+}
+
+function calculateTotal(items) {
+    return items.reduce((sum, item) => sum + item.total, 0);
+}
+
+function getStatusClass(status) {
+    if (status === "Dibeli" || status === "Digunakan") return "status-used";
+    if (status === "Tersisa") return "status-remaining";
+    return "status-todo";
+}
+
+function getRowClass(status) {
+    if (status === "Dibeli" || status === "Digunakan") return "row-used";
+    return "";
+}
+
+function renderFunding() {
+    const container = document.getElementById('fundingContent');
+    let html = '';
+    let totalFunding = 0;
+    
+    fundingData.sources.forEach(source => {
+        totalFunding += source.amount;
+        html += `
+            <div class="status-row">
+                <div>
+                    <span class="status-label">${source.name}</span>
+                    <span class="item-description">${source.description}</span>
+                </div>
+                <span class="status-value">${formatCurrency(source.amount)}</span>
+            </div>
+        `;
+    });
+    
+    html += `
+        <div class="status-row" style="margin-top: 0.5rem; border-top: 1px solid rgba(0, 255, 242, 0.3); padding-top: 0.5rem;">
+            <span class="status-label" style="font-weight: 600;">Total Dana</span>
+            <span class="status-value" style="font-size: 0.8rem;">${formatCurrency(totalFunding)}</span>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Return untuk digunakan di status
+    return totalFunding;
+}
+
+function renderDonationDetail() {
+    const container = document.getElementById('donationDetailContent');
+    let html = '';
+    const totalDonation = fundingData.sources.find(s => s.name === "Donasi").amount;
+    let totalUsed = 0;
+    
+    html += `
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ITEM</th>
+                        <th>KUANTITAS</th>
+                        <th>SATUAN</th>
+                        <th>JUMLAH</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${donationDetailData.items.map((item) => {
+                        if (item.status === "Digunakan") {
+                            totalUsed += item.total;
+                        }
+                        return `
+                            <tr class="${getRowClass(item.status)}">
+                                <td>
+                                    <span class="item-name">${item.name}</span>
+                                    <span class="item-description">${item.description}</span>
+                                </td>
+                                <td data-label="Kuantitas">${item.quantity}</td>
+                                <td data-label="Satuan">${item.unit}</td>
+                                <td data-label="Total">${formatCurrency(item.total)}</td>
+                                <td data-label="Status" class="${getStatusClass(item.status)}">${item.status}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                    <tr class="subtotal-row">
+                        <td colspan="3" style="text-align: right">Total Dana Donasi</td>
+                        <td colspan="2" data-label="Total Dana">${formatCurrency(totalDonation)}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function renderBudget() {
+    const container = document.getElementById('budgetContent');
+    let html = '';
+    let grandTotal = 0;
+
+    budgetData.categories.forEach((category, categoryIndex) => {
+        const categoryTotal = calculateTotal(category.items);
+        grandTotal += categoryTotal;
+
+        html += `
+            <div class="category">
+                <h2 class="category-title">${category.name}</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ITEM</th>
+                                <th>KUANTITAS</th>
+                                <th>SATUAN</th>
+                                <th>HARGA SATUAN</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${category.items.map((item, itemIndex) => `
+                                <tr class="${getRowClass(item.status)}">
+                                    <td>
+                                        <span class="item-name">${item.name}</span>
+                                        <span class="item-description">${item.description}</span>
+                                    </td>
+                                    <td data-label="Kuantitas">${item.quantity}</td>
+                                    <td data-label="Satuan">${item.unit}</td>
+                                    <td data-label="Harga Satuan">${formatCurrency(item.price)}</td>
+                                    <td data-label="Total">
+                                        ${formatCurrency(item.total)}
+                                        <span class="item-description ${getStatusClass(item.status)}">${item.status}</span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                            <tr class="subtotal-row">
+                                <td colspan="4" style="text-align: right">Subtotal</td>
+                                <td data-label="Subtotal">${formatCurrency(categoryTotal)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `
+        <div class="grand-total">
+            <h3 class="grand-total-title">Total Anggaran</h3>
+            <div class="total-amount">${formatCurrency(grandTotal)}</div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    return grandTotal;
+}
+
+function renderStatus() {
+    const totalFunding = renderFunding();
+    const totalBudget = renderBudget();
+    const container = document.getElementById('statusContent');
+    
+    // Calculate used budget
+    let totalUsed = 0;
+    let totalPurchased = 0;
+    let totalRemaining = 0;
+    let totalTodo = 0;
+    
+    budgetData.categories.forEach(category => {
+        category.items.forEach(item => {
+            if (item.status === "Digunakan") {
+                totalUsed += item.total;
+            } else if (item.status === "Dibeli") {
+                totalPurchased += item.total;
+            } else if (item.status === "Tersisa") {
+                totalRemaining += item.total;
+            } else {
+                totalTodo += item.total;
+            }
+        });
+    });
+    
+    const totalUsedAndPurchased = totalUsed + totalPurchased;
+    const budgetProgress = (totalUsedAndPurchased / totalBudget) * 100;
+    
+    let html = `
+        <div class="status-row">
+            <span class="status-label">Total Dana</span>
+            <span class="status-value">${formatCurrency(totalFunding)}</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Total Anggaran</span>
+            <span class="status-value">${formatCurrency(totalBudget)}</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Selisih</span>
+            <span class="status-value ${totalFunding >= totalBudget ? "status-purchased" : "status-todo"}">${formatCurrency(totalFunding - totalBudget)}</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Dana Terpakai</span>
+            <span class="status-value status-used">${formatCurrency(totalUsedAndPurchased)} (${budgetProgress.toFixed(1)}%)</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Dana Belum Terpakai</span>
+            <span class="status-value status-todo">${formatCurrency(totalTodo)}</span>
+        </div>
+        
+        <div class="status-progress">
+            <div class="progress-bar" style="width: ${budgetProgress}%"></div>
+        </div>
+        
+        <div class="status-pills">
+            <div class="status-pill pill-used">Dana Telah Digunakan: ${formatCurrency(totalUsed)}</div>
+            <div class="status-pill pill-remaining">Dana Tersisa: ${formatCurrency(totalRemaining)}</div>
+            <div class="status-pill pill-todo">Dana Belum Digunakan: ${formatCurrency(totalTodo)}</div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Render detailed expenditure
+    renderDetailedExpenditure(totalUsed);
+}
+
+function renderDetailedExpenditure(totalUsed) {
+    const container = document.getElementById('detailedExpenditure');
+    let html = '<div class="expenditure-detail">';
+    html += '<h3 class="status-title">Rincian Pengeluaran</h3>';
+    
+    budgetData.categories.forEach(category => {
+        let categoryUsed = 0;
+        category.items.forEach(item => {
+            if (item.status === "Digunakan") {
+                categoryUsed += item.total;
+            }
+        });
+        
+        if (categoryUsed > 0) {
+            const percentage = ((categoryUsed / totalUsed) * 100).toFixed(1);
+            html += `
+                <div class="status-row">
+                    <span class="status-label">${category.name}</span>
+                    <span class="status-value status-used">${formatCurrency(categoryUsed)} (${percentage}%)</span>
+                </div>
+            `;
+        }
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
+    renderDonationDetail();
+    renderStatus();
+});
+    </script>
+</body>
+</html>
